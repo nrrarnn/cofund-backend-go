@@ -3,6 +3,8 @@ package routes
 import (
 	"github.com/nrrarnn/cofund-backend/internal/admin"
 	"github.com/nrrarnn/cofund-backend/internal/customer"
+	"github.com/nrrarnn/cofund-backend/internal/loan"
+	"github.com/nrrarnn/cofund-backend/config"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -18,8 +20,13 @@ func SetupRoutes(app *fiber.App) {
 	customerService := customer.NewCustomerService(customerRepo)
 	customerHandler := customer.NewCustomerHandler(customerService)
 
+	loanRepo := loan.NewLoanRepository(config.DB)
+	loanService := loan.NewLoanService(loanRepo)
+	loanHandler := loan.NewLoanHandler(loanService)
+
 	
 	api := app.Group("/api")
 	api.Post("/login", handler.Login)
 	api.Post("/customer", customerHandler.Create)
+	api.Post("/loan", loanHandler.CreateLoan)
 }
