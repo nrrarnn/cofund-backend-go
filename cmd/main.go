@@ -8,6 +8,7 @@ import (
 	"os"
 	loan "github.com/nrrarnn/cofund-backend/internal/loan"
 	customerModel "github.com/nrrarnn/cofund-backend/internal/customer/model"
+	payment "github.com/nrrarnn/cofund-backend/internal/payment"
 )
 
 func main() {
@@ -18,6 +19,7 @@ func main() {
 	config.DB.AutoMigrate(&model.Admin{})
 	config.DB.AutoMigrate(&customerModel.Customer{})
 	config.DB.AutoMigrate(&loan.Loan{})
+	config.DB.AutoMigrate(&payment.Payment{})
 
 	routes.SetupRoutes(app)
 
