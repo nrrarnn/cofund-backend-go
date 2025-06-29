@@ -7,6 +7,7 @@ import (
 
 type LoanService interface {
 	CreateLoan(input CreateLoanRequest) error
+	GetLoansByCustomerID(customerID uint) ([]Loan, error)
 }
 
 type loanService struct {
@@ -34,4 +35,8 @@ func (s *loanService) CreateLoan(input CreateLoanRequest) error {
 	}
 
 	return s.repo.Create(&loan)
+}
+
+func (s *loanService) GetLoansByCustomerID(customerID uint) ([]Loan, error) {
+	return s.repo.FindByCustomerID(customerID)
 }

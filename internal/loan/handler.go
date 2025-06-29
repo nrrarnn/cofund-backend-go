@@ -1,6 +1,7 @@
 package loan
 
 import (
+	"strconv"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -30,4 +31,24 @@ func (h *LoanHandler) CreateLoan(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
 		"message": "Loan created successfully",
 	})
+}
+
+func (h *LoanHandler) GetLoansByCustomerID(c *fiber.Ctx) error {
+	idParam := c.Params("customer_id")
+
+	customerID, err := strconv.Atoi(idParam)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": "Invalid customer ID",
+		})
+	}
+
+	loans, err := h.service.GetLoansByCustomerID(uint(customerID))
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"message": "Failed to get loans",
+		})
+	}
+
+	return c.JSON(loans)
 }

@@ -36,4 +36,5 @@ func SetupRoutes(app *fiber.App) {
 	api.Post("/loan", loanHandler.CreateLoan)
 	api.Post("/payment", paymentHandler.CreateComboPayment)
 	api.Get("/customers", customerHandler.GetAllCustomers)
+	api.Get("/loans/:customer_id", loanHandler.GetLoansByCustomerID)
 }
