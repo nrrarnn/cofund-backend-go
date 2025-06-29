@@ -28,3 +28,14 @@ func (h *CustomerHandler) Create(c *fiber.Ctx) error {
 		"data":    customer,
 	})
 }
+
+func (h *CustomerHandler) GetAllCustomers(c *fiber.Ctx) error {
+	customers, err := h.service.GetAllCustomers()
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"message": "Failed to retrieve customers",
+		})
+	}
+	return c.JSON(customers)
+}
+
