@@ -8,6 +8,7 @@ import (
 
 type CustomerRepository interface {
 	Create(customer *model.Customer) error
+	GetAll() ([]model.Customer, error)
 }
 
 type customerRepo struct {
@@ -20,4 +21,10 @@ func NewCustomerRepository() CustomerRepository {
 
 func (r *customerRepo) Create(customer *model.Customer) error {
 	return r.db.Create(customer).Error
+}
+
+func (r *customerRepo) GetAll() ([]model.Customer, error) {
+	var customers []model.Customer
+	err := r.db.Find(&customers).Error
+	return customers, err
 }
