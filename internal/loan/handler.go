@@ -52,3 +52,30 @@ func (h *LoanHandler) GetLoansByCustomerID(c *fiber.Ctx) error {
 
 	return c.JSON(loans)
 }
+
+func (h *LoanHandler) UpdateLoan(c *fiber.Ctx) error {
+	idParam := c.Params("id")
+	id, err := strconv.Atoi(idParam)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": "Invalid ID",
+		})
+	}
+
+	var req UpdateLoanRequest
+	if err := c.BodyParser(&req); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": "Invalid request body",
+		})
+	}
+
+	if err := h.service.UpdateLoan(uint(id), req); err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"message": "Failed to update loan",
+		})
+	}
+
+	return c.JSON(fiber.Map{
+		"message": "Loan updated successfully",
+	})
+}

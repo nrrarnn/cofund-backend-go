@@ -8,6 +8,8 @@ import (
 type LoanService interface {
 	CreateLoan(input CreateLoanRequest) error
 	GetLoansByCustomerID(customerID uint) ([]Loan, error)
+	UpdateLoan(id uint, input UpdateLoanRequest) error
+
 }
 
 type loanService struct {
@@ -36,6 +38,25 @@ func (s *loanService) CreateLoan(input CreateLoanRequest) error {
 
 	return s.repo.Create(&loan)
 }
+
+func (s *loanService) UpdateLoan(id uint, input UpdateLoanRequest) error {
+	loan, err := s.repo.FindByID(id)
+	if err != nil {
+		return err
+	}
+
+	loan.Amount = input.Amount
+	loan.ServiceFee = input.ServiceFee
+
+	loanDate, err := time.Parse("2006-01-02", input.LoanDate)
+	if err != nil {
+		return err
+	}
+	loan.LoanDate = loanDate
+
+	return s.repo.Update(loan)
+}
+
 
 func (s *loanService) GetLoansByCustomerID(customerID uint) ([]Loan, error) {
 	return s.repo.FindByCustomerID(customerID)

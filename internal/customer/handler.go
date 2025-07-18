@@ -75,5 +75,3 @@ func (h *CustomerHandler) DeleteCustomer(c *fiber.Ctx) error {
 
 	return c.JSON(fiber.Map{"message": "Customer deleted successfully"})
 }
-
-
