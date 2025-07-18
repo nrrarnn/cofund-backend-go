@@ -28,7 +28,6 @@ func SetupRoutes(app *fiber.App) {
 	paymentRepo := payment.NewPaymentRepository(config.DB)
 	paymentService := payment.NewPaymentService(paymentRepo)	
 	paymentHandler := payment.NewPaymentHandler(paymentService)	
-
 	
 	api := app.Group("/api")
 	api.Post("/login", handler.Login)
@@ -37,4 +36,7 @@ func SetupRoutes(app *fiber.App) {
 	api.Post("/payment", paymentHandler.CreateComboPayment)
 	api.Get("/customers", customerHandler.GetAllCustomers)
 	api.Get("/loans/:customer_id", loanHandler.GetLoansByCustomerID)
+	api.Put("/customers/:id", customerHandler.UpdateCustomer)
+	api.Delete("/customers/:id", customerHandler.DeleteCustomer)
+
 }

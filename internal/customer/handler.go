@@ -1,6 +1,8 @@
 package customer
 
 import (
+	"strconv"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/nrrarnn/cofund-backend/internal/customer/model"
 )
@@ -38,4 +40,40 @@ func (h *CustomerHandler) GetAllCustomers(c *fiber.Ctx) error {
 	}
 	return c.JSON(customers)
 }
+
+func (h *CustomerHandler) UpdateCustomer(c *fiber.Ctx) error {
+	idParam := c.Params("id")
+	id, err := strconv.Atoi(idParam)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"message": "Invalid ID"})
+	}
+
+	var req UpdateCustomerRequest
+	if err := c.BodyParser(&req); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"message": "Invalid request body"})
+	}
+
+	err = h.service.UpdateCustomer(uint(id), req)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"message": "Failed to update customer"})
+	}
+
+	return c.JSON(fiber.Map{"message": "Customer updated successfully"})
+}
+
+func (h *CustomerHandler) DeleteCustomer(c *fiber.Ctx) error {
+	idParam := c.Params("id")
+	id, err := strconv.Atoi(idParam)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"message": "Invalid ID"})
+	}
+
+	err = h.service.DeleteCustomer(uint(id))
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"message": "Failed to delete customer"})
+	}
+
+	return c.JSON(fiber.Map{"message": "Customer deleted successfully"})
+}
+
 
