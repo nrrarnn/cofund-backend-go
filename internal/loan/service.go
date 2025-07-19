@@ -9,6 +9,8 @@ type LoanService interface {
 	CreateLoan(input CreateLoanRequest) error
 	GetLoansByCustomerID(customerID uint) ([]Loan, error)
 	UpdateLoan(id uint, input UpdateLoanRequest) error
+	DeleteLoan(id uint) error
+
 
 }
 
@@ -60,4 +62,8 @@ func (s *loanService) UpdateLoan(id uint, input UpdateLoanRequest) error {
 
 func (s *loanService) GetLoansByCustomerID(customerID uint) ([]Loan, error) {
 	return s.repo.FindByCustomerID(customerID)
+}
+
+func (s *loanService) DeleteLoan(id uint) error {
+	return s.repo.Delete(id)
 }

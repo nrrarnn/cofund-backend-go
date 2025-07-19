@@ -79,3 +79,25 @@ func (h *LoanHandler) UpdateLoan(c *fiber.Ctx) error {
 		"message": "Loan updated successfully",
 	})
 }
+
+func (h *LoanHandler) DeleteLoan(c *fiber.Ctx) error {
+	idParam := c.Params("id")
+	id, err := strconv.Atoi(idParam)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": "Invalid ID",
+		})
+	}
+
+	err = h.service.DeleteLoan(uint(id))
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"message": "Failed to delete loan",
+		})
+	}
+
+	return c.JSON(fiber.Map{
+		"message": "Loan deleted successfully",
+	})
+}
+

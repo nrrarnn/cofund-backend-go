@@ -9,6 +9,8 @@ type LoanRepository interface {
 	FindByCustomerID(customerID uint) ([]Loan, error)
 	Update(loan Loan) error
 	FindByID(id uint) (Loan, error)
+	Delete(id uint) error
+
 }
 
 type loanRepository struct {
@@ -38,3 +40,8 @@ func (r *loanRepository) FindByID(id uint) (Loan, error) {
 	err := r.db.First(&loan, id).Error
 	return loan, err
 }
+
+func (r *loanRepository) Delete(id uint) error {
+	return r.db.Delete(Loan{}, id).Error
+}
+

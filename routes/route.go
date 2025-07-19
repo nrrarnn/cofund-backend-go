@@ -39,5 +39,5 @@ func SetupRoutes(app *fiber.App) {
 	api.Delete("/customers/:id", customerHandler.DeleteCustomer)
 	api.Get("/loans/:customer_id", loanHandler.GetLoansByCustomerID)
 	api.Put("/loans/:id", loanHandler.UpdateLoan)
-
+	api.Delete("/loans/:id", loanHandler.DeleteLoan)
 }
