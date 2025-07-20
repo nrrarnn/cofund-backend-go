@@ -1,6 +1,7 @@
 package payment
 
 import (
+	"strconv"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -26,3 +27,35 @@ func (h *PaymentHandler) CreateComboPayment(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusCreated).JSON(fiber.Map{"message": "Payment successful"})
 }
 
+func (h *PaymentHandler) UpdatePayment(c *fiber.Ctx) error {
+	idParam := c.Params("id")
+	id, err := strconv.Atoi(idParam)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"message": "Invalid ID"})
+	}
+
+	var req UpdatePaymentRequest
+	if err := c.BodyParser(&req); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"message": "Invalid request body"})
+	}
+
+	if err := h.service.UpdatePayment(uint(id), req); err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"message": "Failed to update payment"})
+	}
+
+	return c.JSON(fiber.Map{"message": "Payment updated successfully"})
+}
+
+func (h *PaymentHandler) DeletePayment(c *fiber.Ctx) error {
+	idParam := c.Params("id")
+	id, err := strconv.Atoi(idParam)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"message": "Invalid ID"})
+	}
+
+	if err := h.service.DeletePayment(uint(id)); err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"message": "Failed to delete payment"})
+	}
+
+	return c.JSON(fiber.Map{"message": "Payment deleted successfully"})
+}
