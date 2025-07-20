@@ -40,4 +40,6 @@ func SetupRoutes(app *fiber.App) {
 	api.Get("/loans/:customer_id", loanHandler.GetLoansByCustomerID)
 	api.Put("/loans/:id", loanHandler.UpdateLoan)
 	api.Delete("/loans/:id", loanHandler.DeleteLoan)
+	api.Put("/payments/:id", paymentHandler.UpdatePayment)
+	api.Delete("/payments/:id", paymentHandler.DeletePayment)
 }
