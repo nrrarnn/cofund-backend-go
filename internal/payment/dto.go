@@ -7,3 +7,9 @@ type CreateComboPaymentRequest struct {
 	MandatoryAmount   int    `json:"mandatory_amount"`
 	PayDate           string `json:"pay_date"` 
 }
+
+type UpdatePaymentRequest struct {
+	Amount  int     `json:"amount"`
+	Type    string  `json:"type"`     
+	PayDate string  `json:"pay_date"` 
+}

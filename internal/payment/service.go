@@ -6,6 +6,9 @@ import (
 
 type PaymentService interface {
 	CreateComboPayment(input CreateComboPaymentRequest) error
+		UpdatePayment(id uint, input UpdatePaymentRequest) error
+	DeletePayment(id uint) error
+
 }
 
 type paymentService struct {
@@ -49,3 +52,26 @@ func (s *paymentService) CreateComboPayment(input CreateComboPaymentRequest) err
 
 	return nil
 }
+
+func (s *paymentService) UpdatePayment(id uint, input UpdatePaymentRequest) error {
+	payment, err := s.repo.FindByID(id)
+	if err != nil {
+		return err
+	}
+
+	payment.Amount = input.Amount
+	payment.Type = input.Type
+
+	payDate, err := time.Parse("2006-01-02", input.PayDate)
+	if err != nil {
+		return err
+	}
+	payment.PayDate = payDate
+
+	return s.repo.Update(payment)
+}
+
+func (s *paymentService) DeletePayment(id uint) error {
+	return s.repo.Delete(id)
+}
+
